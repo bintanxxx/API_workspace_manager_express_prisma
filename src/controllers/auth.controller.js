@@ -108,8 +108,35 @@ export const loginUser = async (req, res, next) => {
             },
         })
 
+        console.log(user)
+
     }
     catch (error) {
         next(error)
     }
 }
+
+export const logoutUser = async (req, res, next) => {
+    try {
+        const {jti, exp} = req.user;
+
+        const expiresAt = new Date(exp * 1000)
+
+        await prisma.invalid_tokens.create({
+            data : {
+                jti: jti,
+                expires_at: expiresAt
+            }
+        })
+
+        res.status(200).json({
+            message : "Logout Berhasil"
+        })
+    } catch (error) {
+        if (error.code === 'P2002') {
+            return res.status(200).json({message : "Token sudah di blacklist"})
+        }
+        next(error);
+    }
+}
+

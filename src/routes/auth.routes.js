@@ -1,7 +1,8 @@
 import express from 'express';
-import { registerUser, loginUser } from '../controllers/auth.controller.js';
+import { registerUser, loginUser, logoutUser } from '../controllers/auth.controller.js';
 import { validate } from '../middlewares/validate.js'; // Middleware validasi (kita buat di bawah)
 import { registerSchema, loginSchema } from '../schemas/auth.schema.js';
+import authenticateToken from '../middlewares/authenticateToken.js'
 
 const router = express.Router()
 
@@ -14,5 +15,11 @@ router.post('/login',
     validate(loginSchema),
     loginUser
 )
+
+router.post('/logout',
+    authenticateToken,
+    logoutUser
+)
+
 
 export default router;
