@@ -13,7 +13,7 @@ const authenticateToken = async  (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Decode',decoded)
+        
         const {jti} = decoded;
 
         const tokenInBlackList = await prisma.invalid_tokens.findUnique({
