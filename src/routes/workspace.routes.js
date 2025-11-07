@@ -12,6 +12,9 @@ import authenticateToken from '../middlewares/authenticateToken.js'
 import {validate} from '../middlewares/validate.js'
 import {createWorkspaceSchema, getWorkspaceSchema, updateWorkspaceSchema} from '../schemas/workspace.schema.js'
 
+
+import memberRoutes from './member.routes.js'
+
 const router = express.Router()
 
 router.route('/')
@@ -24,4 +27,7 @@ router.route('/:id')
     .put(authenticateToken, validate(updateWorkspaceSchema), updateWorkspace)
     .delete(authenticateToken, validate(getWorkspaceSchema), deleteWorkspace)
 
+
+
+router.use('/:id/members', memberRoutes)
 export default router;
